@@ -1,7 +1,11 @@
 package org.khoivu.restfulwebservice.user;
 
 import java.util.Date;
-
+import java.util.List;
+import javax.persistence.Entity;
+import javax.persistence.FetchType;
+import javax.persistence.Id;
+import javax.persistence.OneToMany;
 import javax.validation.constraints.Past;
 import javax.validation.constraints.Size;
 
@@ -13,8 +17,11 @@ import io.swagger.annotations.ApiModelProperty;
  * @author KhoiVu
  *
  */
+@Entity
 @ApiModel(description = "All details about the user")
 public class User {
+
+  @Id
   private Integer id;
 
   @Size(min = 2, message = "Name should have at least 2 characters")
@@ -25,8 +32,18 @@ public class User {
   @ApiModelProperty(notes = "Birth date should be in the past")
   private Date birthDate;
 
-  public User() {
+  @OneToMany(mappedBy = "user")
+  private List<Post> posts;
+
+  public List<Post> getPosts() {
+    return posts;
   }
+
+  public void setPosts(List<Post> posts) {
+    this.posts = posts;
+  }
+
+  public User() {}
 
   public User(int id, String name, Date birthDate) {
     this.id = id;
